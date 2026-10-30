@@ -1,0 +1,1 @@
+We have a broker(Raspberry Pi) that handle the MQTT communication between our nodes.
