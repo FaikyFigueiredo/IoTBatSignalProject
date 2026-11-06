@@ -1,13 +1,16 @@
 export type LedStateEvent = {
+    station : String;
     state : boolean;
     timestamp : String;
 }
 
 export class LedState{
-    private state : Number; //1 = on, 0 = off
+    private state : Number;
+    private station : String; //1 = on, 0 = off
     private timestamp : String; //time to be stored in the DB
-    constructor(state : Number){
+    constructor(state : Number, station : String){
         this.state = state;
+        this.station = station;
         this.timestamp = new Date().toLocaleString('sv-SE', {
             timeZone: 'America/Sao_Paulo'
         }).replace(' ', 'T') + 'Z';
@@ -15,6 +18,10 @@ export class LedState{
 
     getState() : Number{
         return this.state;
+    }
+
+    getStation() : String{
+        return this.station;
     }
 
     getTime() : String{

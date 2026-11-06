@@ -3,6 +3,7 @@ import http from 'http';
 import { addState, getStates } from './LedStateService';
 import { WebSocketServer } from 'ws';
 import { wsAdd, wsAlert, wsRemove } from './WebSocketHandler';
+import { LedState } from './LedStateClass';
 
 const app = express();
 const server = http.createServer(app);
@@ -15,7 +16,7 @@ app.use(express.json());
 
 //HTTP STUFF
 app.post('/status/post', (req : Request, res : Response) =>{
-        addState(req.body);
+        addState(new LedState(req.body.state, req.body.station));
         wsAlert(clients, req.body.state);
         res.status(201).send("Successfully created");
 });
@@ -34,9 +35,13 @@ app.listen(PORT, () => {
 
 //WEBSOCKET STUFF
 ws.on( 'connection', (client : WebSocket) =>{
-    wsAdd(client,clients);
+    client.url.startsWith("/frontend") ? 
+        wsAdd(client,clients):
+        wsAdd(client,brokers);
     
-    ws.on( 'close', (client : WebSocket) =>
-        wsRemove(client,clients)
-    );
+    ws.on( 'close', (client : WebSocket) =>{
+        client.url.startsWith("/frontend") ? 
+            wsRemove(client,clients):
+            wsRemove(client,brokers);
+    });
 });

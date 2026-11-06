@@ -19,9 +19,10 @@ export class LedStateRepository{
     private init() : void{
         this.db.exec(`
             CREATE TABLE IF NOT EXISTS LED_STATE(
+                ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                STATION TEXT NOT NULL,
                 STATE INT(1) NOT NULL,
-                TIMESTAMP TEXT NOT NULL,
-                PRIMARY KEY(STATE,TIMESTAMP)
+                TIMESTAMP TEXT NOT NULL
             );
         `)
     }
@@ -29,23 +30,24 @@ export class LedStateRepository{
     save(state : LedState) : void{
         const insert = this.db.prepare(`
             INSERT INTO LED_STATE
-                (STATE, TIMESTAMP) VALUES (?, ?);
+                (STATION, STATE, TIMESTAMP) VALUES (?, ?, ?);
         `)
-        insert.run(state.getState(), state.getTime());
+        insert.run(state.getStation(), state.getState(), state.getTime());
         console.log("State saved into DB")
     }
 
     load() : LedStateEvent[]{
 
         const select = this.db.prepare(`
-            SELECT STATE, TIMESTAMP
+            SELECT STATION, STATE, TIMESTAMP
             FROM LED_STATE
             WHERE TIMESTAMP >= DATETIME('NOW', '-1 DAY')
             ORDER BY TIMESTAMP DESC;
         `);
-        const rows = select.all() as { STATE: number; TIMESTAMP: string }[];
+        const rows = select.all() as { STATION : String; STATE: number; TIMESTAMP: string }[];
 
         return rows.map(row => ({
+            station : row.STATION,
             state: row.STATE == 1,
             timestamp: row.TIMESTAMP
         }));
