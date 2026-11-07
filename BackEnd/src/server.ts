@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import http from 'http';
 import { addState, getStates } from './LedStateService';
 import { WebSocketServer } from 'ws';
-import { wsAdd, wsAlert, wsRemove } from './WebSocketHandler';
+import { wsAdd, wsAlert, wsRemove, wsSearchSend } from './WebSocketHandler';
 import { LedState } from './LedStateClass';
 
 const app = express();
@@ -20,13 +20,13 @@ app.post('/status/post', (req : Request, res : Response) =>{
         wsAlert(clients, req.body.state);
         res.status(201).send("Successfully created");
 });
-app.post('/toggleled', (req : Request, res : Response) => {
-    const station = req.body.station;
-    res.status(201).send("LED toggled");
-});
 
 app.get('/status/get', (req : Request, res: Response) => {
-    res.status(200).send(getStates());
+    try{
+        res.status(200).send(getStates(req.query.station!.toString()));
+    }catch(err){
+        res.status(400);
+    }
 });
 
 app.listen(PORT, () => {
@@ -38,7 +38,13 @@ ws.on( 'connection', (client : WebSocket) =>{
     client.url.startsWith("/frontend") ? 
         wsAdd(client,clients):
         wsAdd(client,brokers);
-    
+
+    ws.on('message', (message : Buffer) => {
+        const toggle = JSON.parse(message.toString());
+        if(toggle.message === "TOGGLE")
+            wsSearchSend(brokers, toggle.station);
+    })
+
     ws.on( 'close', (client : WebSocket) =>{
         client.url.startsWith("/frontend") ? 
             wsRemove(client,clients):

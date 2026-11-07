@@ -10,3 +10,11 @@ export const wsAlert = (list : Set<WebSocket>, bit : Number) =>{
             ws.send(bit.toString());
     }
 }
+export const wsSearchSend = (list : Set<WebSocket>, station : String) => {
+    for(const ws of list){
+        if(ws.url === `/${station}`){
+            ws.send('TOGGLE');
+            return;
+        }
+    }
+}

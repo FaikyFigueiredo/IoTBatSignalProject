@@ -36,12 +36,12 @@ export class LedStateRepository{
         console.log("State saved into DB")
     }
 
-    load() : LedStateEvent[]{
+    load(station : String) : LedStateEvent[]{
 
         const select = this.db.prepare(`
             SELECT STATION, STATE, TIMESTAMP
             FROM LED_STATE
-            WHERE TIMESTAMP >= DATETIME('NOW', '-1 DAY')
+            WHERE TIMESTAMP >= DATETIME('NOW', '-1 DAY'), STATION = ${station}
             ORDER BY TIMESTAMP DESC;
         `);
         const rows = select.all() as { STATION : String; STATE: number; TIMESTAMP: string }[];
