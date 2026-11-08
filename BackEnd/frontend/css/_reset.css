@@ -1,0 +1,25 @@
+/*GERALZÃO*/
+
+body {
+    background-image: url("images/bg_batman.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    min-height: 100vh;
+
+    /* Fonte padrão do dashboard */
+    font-family: "Montserrat", sans-serif;
+    margin: 0;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    /*pode ser que alteremos isso acima conforme necessário!*/
+
+    gap: 32px;
+    min-height: 100vh;
+    padding: 32px;
+    box-sizing: border-box;
+}

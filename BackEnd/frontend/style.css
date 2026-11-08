@@ -1,0 +1,286 @@
+/*
+titulo - saira semi condensed medium 500
+
+subtitulo - Cinzel regular 400
+
+"Liga/Desliga" e "BatSignal nas últimas 24h" - saira... medium light 300
+
+mensagem feedback - montserrat regular 400
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Montserrat:wght@100..900&family=Saira+Semi+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+/*GERALZÃO*/
+
+body {
+    background-image: url("images/bg_batman.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    min-height: 100vh;
+
+    /* Fonte padrão do dashboard */
+    font-family: "Montserrat", sans-serif;
+    margin: 0;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    /*pode ser que alteremos isso acima conforme necessário!*/
+
+    gap: 32px;
+    min-height: 100vh;
+    padding: 32px;
+    box-sizing: border-box;
+}
+
+
+/*
+P A I N E L   E S Q U E R D O
+*/
+
+
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    /*justify-content: space-between;*/
+    /*justify-content: space-around;*/
+    justify-content: flex-start;
+    gap: 200px; /*é o espaço entre as "seções"*//
+}
+
+
+/*HEADER*/
+
+.left-panel header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.batsignal-title {
+    font-family: "Saira Semi Condensed", sans-serif;
+    font-size: 5.5rem;
+    font-weight: 700;
+    font-style: normal;
+    text-transform: uppercase;
+    color: #ffffff;
+    letter-spacing: 2px;
+    margin: 0;
+
+    line-height: 0.85;
+}
+
+/*Depratamento ... Gotham City*/
+.subtitle {  
+    font-family: "Cinzel", serif;
+    font-optical-sizing: auto;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #cccccc;
+    margin: 0;
+
+    max-width: 600px;
+}
+
+
+
+/*SOBRE O BOTÃO*/
+
+
+.control-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+
+    margin-top: 3rem;
+    margin-left: clamp(0.1rem, 10vw, 10rem);
+    /*clamp é uma função pra ajustar essas seção conforme o tamanho da tela*/
+
+    /*outline: 2px solid red;*/
+}
+
+/*liga/desliga*/
+.button-title {
+    font-family: "Saira Semi Condensed", sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #d6d6d6;
+    margin: 0;
+
+    width: 170px; /*botão e texto com a mesma largura, só align center em ambos e blau*/
+    text-align: center;
+}
+
+#batsignal-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 170px;
+    height: 64px;
+
+    border: 2px solid #d6d6d6;
+    border-radius: 32px;
+    /*border radius sendo exatamente metade da altura = arredondamento para formato de pilula, como eu queria*/
+
+    background-color: #202630;
+    color: #ffffff;
+
+    font-size: 2rem;
+    cursor: pointer;
+
+    transition: background-color 0.15s ease,
+            transform 0.08s ease,
+            box-shadow 0.08s ease;
+    /*as mudanças que ocorrem quando o mouse passar sobre o botão serão transitions suaves, é isto que estamos estebelecendo*/
+}
+
+/*comportamento do botão quando acontece x coisa*/
+#batsignal-button:active {
+    transform: translateY(2px);
+    /*afundada de 1px ao clicar*/
+    /*box-shadow: 0 1px 0 #111820;*/
+}
+#batsignal-button:hover {
+    background-color: #344154;
+    /*efeitinho pra quando o cursor parar sobre o botão*/
+}
+#batsignal-button:focus-visible {
+    outline: 3px solid #66aaff;
+    /*quando se estiver navegando na pagina pelo teclado e o botão for selecionado
+
+    esse azul é quase a cor da imagem do led*/
+    outline-offset: 4px;
+}
+
+
+
+/*LED + FEEDBACK*/
+.feedback-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center; /*led+texto alinhados a um mesmo eixo horizontal*/
+    gap: 15px; /*distancia entre led e texto*/
+
+    margin-top: 5rem;
+    margin-left: clamp(0.1rem, 10vw, 2rem);
+}
+
+#led-img {
+    display: block;
+    width: 60px;
+    height: auto;
+    flex-shrink: 0;
+}
+
+#feedback-message {
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.5; /*espaçamento entre linhas*/
+    color: #d6d6d6;
+    margin: 0;
+    max-width: 200px;
+
+    /*max width cuida da quebra de linha*/
+}
+
+
+
+
+
+
+/*
+P A I N E L   D I R E I T O
+*/
+
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+
+    justify-self: stretch;
+
+    margin-top: 4rem;
+
+
+    /*width: min(100%, 400px);
+    justify-self: center;
+    margin-right: clamp(0.9rem, 9vw, 3rem);
+    margin-top: 4rem;
+    */
+    
+    
+    /*outline: 2px solid red;*/
+
+    /*esses margins nao ta legal, em geral e até pela responsividade. tem que fazer como foi como foi com a seção de controle*/
+}
+
+
+
+/*titulo grafico*/
+.chart-title {
+    font-family: "Saira Semi Condensed", sans-serif;
+    font-weight: 400;
+    font-size: 1.49rem;
+    color: #cccccc;
+
+    width: 100%;
+    /*max-width: 320px;
+    box-sizing: border-box;*/
+
+    text-align: center;
+    margin: 0;
+}
+
+.chart-container { 
+    position: relative;
+
+    width: 100%;
+    height: clamp(220px, 30vh, 350px);
+
+    box-sizing: border-box;
+
+    /*
+    width: min(100%, 320px);
+    height: 220px;
+    align-items: center; */
+}
+
+#batsignal-chart {
+    display: block;
+}
+
+
+/*
+P R A   T E L A S  P E Q U E N A S
+*/
+
+@media (max-width: 900px) {
+
+    .dashboard {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .right-panel {
+        margin-top: 2rem;
+    }
+
+}
+
+/*
+@media (max-width: 700px) {
+    .dashboard {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+*/

@@ -1,0 +1,23 @@
+/*
+P R A   T E L A S  P E Q U E N A S
+*/
+
+@media (max-width: 900px) {
+
+    .dashboard {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .right-panel {
+        margin-top: 2rem;
+    }
+
+}
+
+/*
+@media (max-width: 700px) {
+    .dashboard {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+*/

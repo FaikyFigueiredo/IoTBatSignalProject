@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BatSignal - Departamento de Polícia de Gotham City</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="script.js"></script>
+</head>
+
+
+<body>
+    <main class="dashboard">
+
+        <section class="left-panel">
+            <header>
+                <h1 class="batsignal-title">BATSIGNAL</h1>
+                <p class="subtitle">Departamento de Polícia de Gotham City</p>
+            </header>
+
+
+            <section class="control-section">
+                <h2 class="button-title">Liga/Desliga</h2>
+                <button
+                    id="batsignal-button"
+                    type="button"
+                    aria-label="Liga e desliga batsinal"
+                >
+
+                    <span aria-hidden="true">⏻</span>
+                </button>
+            </section> <!--seção liga/desliga-->
+
+            
+            <section class="feedback-section">
+                <img
+                    id="led-img"
+                    src="images/led_azul_ofc.png"            
+                    alt="LED azul: batsignal aceso"
+                >
+
+                <p id="feedback-message" aria-live="polite">
+                    Aceso, o Coringa está à solta!!!!
+                </p>
+            </section> <!--feedback section-->
+
+
+        </section> <!--painel esquerdo-->
+        
+
+
+        <section class="right-panel"> <!--painel direito-->
+            <h2 class="chart-title">BatSignal nas últimas 24h</h2>
+
+            <div class="chart-container">
+                <canvas
+                    id="batsignal-chart"
+                    role="img"
+                    aria-label="histórico do estado do bat-sinal nas últimas 24h"
+                ></canvas>
+                <!--o grafico vai ser desenhado em cima desse canva [janela]-->
+                
+            </div>
+
+        </section><!--painel direito-->
+
+    </main>
+</body>
+</html>
