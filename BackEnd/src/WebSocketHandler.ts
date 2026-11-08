@@ -1,20 +1,19 @@
-export const wsAdd = (ws : WebSocket, list : Set<WebSocket>) =>{
+import { WebSocket as WsConnection } from "ws";
+
+export const wsAdd = (ws : WsConnection, list : Set<WsConnection>) =>{
     list.add(ws);
 }
-export const wsRemove = (ws : WebSocket, list : Set<WebSocket>) =>{
+export const wsRemove = (ws : WsConnection, list : Set<WsConnection>) =>{
     list.delete(ws);
 }
-export const wsAlert = (list : Set<WebSocket>, bit : Number) =>{
+export const wsAlert = (list : Set<WsConnection>, bit : Number) =>{
     for(const ws of list){
-        if(ws.readyState === WebSocket.OPEN)
+        if(ws.readyState === WsConnection.OPEN)
             ws.send(bit.toString());
     }
 }
-export const wsSearchSend = (list : Set<WebSocket>, station : String) => {
+export const wsSearchSend = (list : Set<WsConnection>, station : String) => {
     for(const ws of list){
-        if(ws.url === `/${station}`){
-            ws.send('TOGGLE');
-            return;
-        }
+        ws.send('TOGGLE');
     }
 }

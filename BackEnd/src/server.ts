@@ -1,20 +1,23 @@
 import express, { Request, Response } from 'express';
-import http from 'http';
+import http, { IncomingMessage } from 'http';
 import { addState, getStates } from './LedStateService';
-import { WebSocketServer } from 'ws';
+import { WebSocketServer, WebSocket as WsConnection } from 'ws';
 import { wsAdd, wsAlert, wsRemove, wsSearchSend } from './WebSocketHandler';
 import { LedState } from './LedStateClass';
 
 const app = express();
 const server = http.createServer(app);
-const ws = new WebSocketServer({ server });
-const brokers = new Set<WebSocket>();
-const clients = new Set<WebSocket>();
+const brokers = new Set<WsConnection>();
+const clients = new Set<WsConnection>();
 const PORT = 3000;
+const ws = new WebSocketServer({ server });
 
 app.use(express.json());
 
+app.use(express.static("frontend"));
+
 //HTTP STUFF
+
 app.post('/status/post', (req : Request, res : Response) =>{
         addState(new LedState(req.body.state, req.body.station));
         wsAlert(clients, req.body.state);
@@ -29,24 +32,30 @@ app.get('/status/get', (req : Request, res: Response) => {
     }
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 //WEBSOCKET STUFF
-ws.on( 'connection', (client : WebSocket) =>{
-    client.url.startsWith("/frontend") ? 
+
+ws.on( 'connection', (client : WsConnection, req : IncomingMessage) =>{
+    const url = req.url || '';
+    
+    console.log("[WS] a connection request:");
+    console.log(url);
+    url.startsWith("/dashboard") ?
         wsAdd(client,clients):
         wsAdd(client,brokers);
 
-    ws.on('message', (message : Buffer) => {
+    client.on('message', (message : Buffer) => {
+        console.log(`Message: ${message.toString()}, received!`);
         const toggle = JSON.parse(message.toString());
         if(toggle.message === "TOGGLE")
             wsSearchSend(brokers, toggle.station);
     })
 
-    ws.on( 'close', (client : WebSocket) =>{
-        client.url.startsWith("/frontend") ? 
+    client.on( 'close', () =>{
+        url.startsWith("/dashboard") ? 
             wsRemove(client,clients):
             wsRemove(client,brokers);
     });
