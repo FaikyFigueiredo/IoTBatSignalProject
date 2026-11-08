@@ -13,7 +13,6 @@
 #include "portmacro.h"
 
 static QueueHandle_t gpio_evt_queue = NULL;
-static uint8_t batStatus = 0;
 static esp_mqtt_client_handle_t client = NULL;
 
 static void IRAM_ATTR gpio_isr_handler(void* arg) {
@@ -27,7 +26,6 @@ static void mqttHandler(void* args, esp_event_base_t base, int32_t eventId, void
     switch ((esp_mqtt_event_id_t)eventId) {
         case MQTT_EVENT_CONNECTED:
 			ESP_LOGI("MQTT", "CONNECTED!!!!");
-			esp_mqtt_client_publish(client, "gotham/dpgc/batimados/batsignal", "Hello World", 0, 1, 0);
 			break;
         case MQTT_EVENT_DISCONNECTED:
             ESP_LOGI("MQTT", "ERROR, Coringa quebrou a rede");
@@ -41,11 +39,8 @@ void batSignalHandler(void* arg){
 	
 	while(1){
 		if(xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)){
-			if(batStatus) msg = "BAT_SIGNAL_OFF";
-			else msg = "BAT_SIGNAL_ON";
 
-			esp_mqtt_client_publish(client, "gotham/dpgc/batimados/batsignal", msg, 0, 1, 0);
-			batStatus = 1 - batStatus;
+			esp_mqtt_client_publish(client, "gotham/dpgc/batimados/batsignal", "BATSIGNAL_TOGGLE", 0, 1, 0);
 		}
 	}
 }
@@ -95,11 +90,14 @@ void app_main(void) {
 #include "driver/gpio.h"
 #include "mqtt_client.h"
 
+static uint8_t batStatus = 0;
+
 //Função que liga e apaga o LED
 void batSignalHandler(void* arg){ //void* endereço de memória cru
 	ESP_LOGI("MQTT", "TOGGLING PIN"); //Log do sistema: envia mensagem pro terminal da IDE
-	if(strcmp((char*)arg, "BAT_SIGNAL_ON"))gpio_set_level(6, 1); //Compara Strings e converte de void* para char*
+	if(batStatus) gpio_set_level(6,0); //Compara Strings e converte de void* para char*
 	else gpio_set_level(6, 0);
+    batStatus = 1 - batStatus;
 }
 
 static void mqttHandler(void* args, esp_event_base_t base, int32_t eventId, void* data) {
@@ -116,6 +114,10 @@ static void mqttHandler(void* args, esp_event_base_t base, int32_t eventId, void
             break;
         case MQTT_EVENT_DATA:
 			batSignalHandler(event->data);//Função vista anteriormente (batSignalHandler)
+            if(batStatus)
+                esp_mqtt_client_publish(client, "gotham/dpgc/batimados/batstatus", "BATSIGNAL_ON", 0, 1, 0);
+            else
+                esp_mqtt_client_publish(client, "gotham/dpgc/batimados/batstatus", "BATSIGNAL_OFF", 0, 1, 0);
 			ESP_LOGI("MQTT", "DATA RECEIVED");// Log do ESP: Printa na IDE
 		default:
     }
