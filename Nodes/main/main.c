@@ -95,9 +95,8 @@ static uint8_t batStatus = 0;
 //Função que liga e apaga o LED
 void batSignalHandler(void* arg){ //void* endereço de memória cru
 	ESP_LOGI("MQTT", "TOGGLING PIN"); //Log do sistema: envia mensagem pro terminal da IDE
-	if(batStatus) gpio_set_level(6,0); //Compara Strings e converte de void* para char*
-	else gpio_set_level(6, 0);
     batStatus = 1 - batStatus;
+	gpio_set_level(6,batStatus);
 }
 
 static void mqttHandler(void* args, esp_event_base_t base, int32_t eventId, void* data) {
