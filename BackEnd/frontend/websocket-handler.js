@@ -32,9 +32,3 @@ export function wsSend(station){
     }else
         console.log("[WS] can't send");
 }
-
-const batButton = document.getElementById("batsignal-button");
-
-batButton.addEventListener('click', ()=>{
-    wsSend('batfriends');
-});

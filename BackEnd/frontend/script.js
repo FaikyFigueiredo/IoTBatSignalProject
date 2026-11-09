@@ -1,4 +1,4 @@
-import { wsInit, wsSend } from "./websocket-handler.js";
+import { wsInit } from "./websocket-handler.js";
 
 /* =========================================
    GRÁFICO DO BATSIGNAL
@@ -10,6 +10,7 @@ const canvas = document.getElementById("batsignal-chart");
 //Obter o contexto de desenho
 const ctx = canvas.getContext("2d");
 
+//Iniciar conexão com o Socket do backend
 wsInit();
 
 // 2. DADOS FICTÍCIOS
