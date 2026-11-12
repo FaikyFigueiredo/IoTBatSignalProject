@@ -1,5 +1,4 @@
 export type LedStateEvent = {
-    station : String;
     state : boolean;
     timestamp : String;
 }
@@ -18,10 +17,6 @@ export class LedState{
 
     getState() : Number{
         return this.state;
-    }
-
-    getStation() : String{
-        return this.station;
     }
 
     getTime() : String{

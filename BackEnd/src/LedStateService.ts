@@ -6,5 +6,5 @@ const db = LedStateRepository.getDB();
 export const addState = (state : LedState) =>
     db.save(state);
 
-export const getStates = (station : String) =>
-    db.load(station);
+export const getStates = () =>
+    db.load();

@@ -12,8 +12,9 @@ export const wsAlert = (list : Set<WsConnection>, bit : Number) =>{
             ws.send(bit.toString());
     }
 }
-export const wsSearchSend = (list : Set<WsConnection>, station : String) => {
+export const wsSearchSend = (list : Set<WsConnection>) => {
     for(const ws of list){
-        ws.send('TOGGLE');
+        if(ws.readyState === WsConnection.OPEN)
+            ws.send('{ "message": "TOGGLE" }');
     }
 }

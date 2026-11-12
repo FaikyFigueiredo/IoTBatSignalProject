@@ -25,11 +25,7 @@ app.post('/status/post', (req : Request, res : Response) =>{
 });
 
 app.get('/status/get', (req : Request, res: Response) => {
-    try{
-        res.status(200).send(getStates(req.query.station!.toString()));
-    }catch(err){
-        res.status(400);
-    }
+    res.status(200).send(getStates());
 });
 
 server.listen(PORT, () => {
@@ -51,11 +47,11 @@ ws.on( 'connection', (client : WsConnection, req : IncomingMessage) =>{
         console.log(`Message: ${message.toString()}, received!`);
         const toggle = JSON.parse(message.toString());
         if(toggle.message === "TOGGLE")
-            wsSearchSend(brokers, toggle.station);
+            wsSearchSend(brokers);
     })
 
     client.on( 'close', () =>{
-        url.startsWith("/dashboard") ? 
+        url.startsWith("/dashboard") ?
             wsRemove(client,clients):
             wsRemove(client,brokers);
     });
